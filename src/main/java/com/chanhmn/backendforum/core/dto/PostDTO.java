@@ -25,6 +25,8 @@ public class PostDTO {
 
     private String listFile;
 
+    private String type;
+
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createDate;

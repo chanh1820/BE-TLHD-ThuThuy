@@ -40,6 +40,9 @@ public class PostEntity {
     @Column(name = "list_file")
     private String listFile;
 
+    @Column(name = "type")
+    private String type;
+
     @CreationTimestamp
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
