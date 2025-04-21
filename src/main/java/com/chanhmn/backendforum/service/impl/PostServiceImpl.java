@@ -92,7 +92,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(PostDTO postDTO) {
-        postRepository.deleteById(postDTO.getId());
+//        postInteractionRepository.deleteInteractByPostId(postDTO.getId());
+//        postCommentRepository.deleteCommentByPostId(postDTO.getId());
+//        postRepository.deleteById(postDTO.getId());
+        Optional<PostEntity> otp = postRepository.findById(postDTO.getId());
+        if(otp.isPresent()){
+            PostEntity postEntity = otp.get();
+            postEntity.setDeleteFlag(true);
+            postRepository.save(postEntity);
+        }
     }
 
     @Override

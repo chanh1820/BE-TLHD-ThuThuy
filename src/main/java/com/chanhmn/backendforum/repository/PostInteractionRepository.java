@@ -27,4 +27,8 @@ public interface PostInteractionRepository extends JpaRepository<PostInteraction
             @Param("postId") int postId,
             @Param("userName") String userName,
             @Param("type") String type);
+
+    @Query(value = "DELETE FROM post_interaction_tbl WHERE " +
+            " post_id = :postId", nativeQuery = true)
+    void deleteInteractByPostId(@Param("postId") int postId);
 }
