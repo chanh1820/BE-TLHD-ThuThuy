@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,6 +91,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void delete(PostDTO postDTO) {
+        postRepository.deleteById(postDTO.getId());
+    }
+
+    @Override
     public List<PostEntity> searchPost(PostSCO postSCO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<PostEntity> criteriaQuery = criteriaBuilder.createQuery(PostEntity.class);
@@ -106,6 +112,7 @@ public class PostServiceImpl implements PostService {
             Predicate predicate = criteriaBuilder.equal(root.get("deleteFlag"), postSCO.getDeleteFlag());
             criteriaQuery.where(predicate);
         }
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get("updateDate")));
 
         TypedQuery<PostEntity> typedQuery = entityManager.createQuery(criteriaQuery);
         return typedQuery.setMaxResults(postSCO.getLimit()).getResultList();
@@ -117,6 +124,9 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
         PostCommentEntity postCommentEntity = postCommentMapper.dtoToEntity(postCommentDTO);
         postCommentEntity.setPostEntity(postEntity);
+
+        postEntity.setUpdateDate(LocalDateTime.now());
+        postRepository.save(postEntity);
         return postCommentRepository.save(postCommentEntity);
     }
 
@@ -132,6 +142,9 @@ public class PostServiceImpl implements PostService {
 
             PostInteractionEntity result = postInteractionRepository.save(postInteractionEntity);
             responseDTO.setData(result);
+
+            postEntity.setUpdateDate(LocalDateTime.now());
+            postRepository.save(postEntity);
         }else {
             responseDTO.setStatusCode(DBConstant.STATUS_CODE_ERROR);
             responseDTO.setMessage("Dulicate post interaction");

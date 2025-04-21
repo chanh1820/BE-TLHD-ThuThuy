@@ -18,6 +18,8 @@ public interface PostService {
 
     PostEntity insert(PostDTO postDTO);
 
+    void delete(PostDTO postDTO);
+
     List<PostEntity> searchPost(PostSCO postSCO);
 
     PostCommentEntity insertComment(PostCommentDTO postCommentDTO);

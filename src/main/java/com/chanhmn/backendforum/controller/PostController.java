@@ -41,6 +41,13 @@ public class PostController {
         return responseDTO;
     }
 
+    @PostMapping("/delete")
+    public ResponseDTO<PostEntity> deletePost(@RequestBody PostDTO postDTO) {
+        ResponseDTO<PostEntity> responseDTO = new ResponseDTO<>();
+        postService.delete(postDTO);
+        return responseDTO;
+    }
+
     @PostMapping("/search_post")
     public ResponseDTO<List<PostDTO>> getPostList(@RequestBody PostSCO postSCO) {
         log.info("Start searchPostList: {}", ObjectMapperUtils.dtoToString(postSCO));
